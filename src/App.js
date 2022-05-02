@@ -1,24 +1,42 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
 
 function App() {
+  const localStorageNumbers = localStorage.getItem('NUMBERS');
+  let data;
+
+  if(!localStorageNumbers){
+    localStorage.setItem('NUMBERS', JSON.stringify(0));
+    data = 0;
+  }else{
+    data = JSON.parse(localStorageNumbers);
+  }
+
+  const [value, setValue] = React.useState(data);
+
+  const onClickButton = (event) => {
+    if(event.target.name === "sum" && value !== 10){
+      setValue(value + 1);
+     
+    }else if(event.target.name === "res" && value !== 0){
+      setValue(value - 1);
+    }
+  }
+
+  React.useEffect(()=>{
+    localStorage.setItem('NUMBERS', JSON.stringify(value));
+  },[value]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <section>
+      <h1>PUNTUADOR</h1>
+      <h3>{value}</h3>
+      <div>
+       <button name="sum" onClick = {onClickButton}>👍</button>
+       <button name="res" onClick = {onClickButton}>👎</button> 
+      </div>
+      
+    </section>
   );
 }
 
